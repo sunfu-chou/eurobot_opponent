@@ -1,0 +1,34 @@
+<launch>
+  <node pkg="nlink_parser" type="linktrack" name="uwb_data_exctractor" output="screen" clear_params="true">
+      <param name="port_name" value="/dev/USB" />
+      <param name="baud_rate" value="921600" />
+
+      <remap from="nlink_linktrack_data_transmission" to="uwb_data_tx"/>
+      <remap from="nlink_linktrack_tagframe0" to="uwb_state"/>
+  </node>
+
+  <node pkg="eurobot_opponent" type="nlink_tagframe_converter" name="nlink_tagframe_converter" output="screen" clear_params="true">
+      <rosparam file="$(find eurobot_opponent)/params/linktrack.yaml" command="load" />
+  </node>
+
+  <node pkg="imu_calib" type="apply_calib" name="apply_calib" output="screen" clear_params="true">
+      <param name="calib_file" value="$(find eurobot_opponent)/params/imu_calib.yaml"/>
+      <param name="calibrate_gyros" value="true"/>
+      <param name="gyro_calib_samples" value="200"/>
+      <remap from="raw" to="uwb_imu_raw"/>
+      <remap from="corrected" to="uwb_imu_calibed"/>
+  </node>
+
+  <node pkg="imu_filter_madgwick" type="imu_filter_node" name="imu_filter_node" output="screen" clear_params="true">
+      <param name="publish_tf" value="false"/>
+      <param name="use_mag" value="false"/>
+      <param name="remove_gravity_vector" value="true"/>
+      <param name="publish_tf" value="false"/>
+  
+      <remap from="imu/data_raw" to="uwb_imu_calibed"/>
+      <remap from="imu/data" to="uwb_imu"/>
+  </node>
+
+  <node name="map_to_odom" pkg="tf2_ros" type="static_transform_publisher" args="0 0 0 0 0 0 odom base_footprint"/>
+  <node name="base_footprint_to_uwb" pkg="tf2_ros" type="static_transform_publisher" args="0 0 0.25 0 0 0 1 base_footprint uwb_frame" />
+</launch>

@@ -1,0 +1,12 @@
+[submodule "eurobot_opponent_ros_ws/src/nlink/nlink_parser"]
+	path = eurobot_opponent_ros_ws/src/nlink/nlink_parser
+	url = https://github.com/nooploop-dev/nlink_parser.git
+[submodule "eurobot_opponent_ros_ws/src/nlink/nlink_serial"]
+	path = eurobot_opponent_ros_ws/src/nlink/nlink_serial
+	url = https://github.com/nooploop-dev/serial.git
+[submodule "eurobot_opponent_ros_ws/src/imu_calib"]
+	path = eurobot_opponent_ros_ws/src/imu_calib
+	url = https://github.com/dpkoch/imu_calib.git
+[submodule "eurobot_opponent_ros_ws/src/imu_tools"]
+	path = eurobot_opponent_ros_ws/src/imu_tools
+	url = https://github.com/sunfu-chou/imu_tools.git
